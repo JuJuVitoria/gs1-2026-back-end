@@ -81,4 +81,9 @@ public class Property {
     public void setState(String state) {
         this.state = state;
     }
+
+    @Override
+    public String toString() {
+        return "Nome da propriedade: " + this.farmName + " - ID do agricultor: " + this.idFarmer + " - ID da propriedade: " + this.id;
+    }
 }

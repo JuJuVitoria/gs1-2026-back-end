@@ -43,4 +43,9 @@ public class Farmer {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Override
+    public String toString() {
+        return "Nome do agricultor: " + this.name + " - Email: " + this.email;
+    }
 }
