@@ -1,17 +1,19 @@
 package br.com.fiap.gs.model;
 
+import br.com.fiap.gs.enums.AlertType;
+import br.com.fiap.gs.enums.RiskLevel;
+
 import java.time.LocalDate;
 
 public class ClimateAlert {
     private long id;
     private long idProperty;
     private String description;
-    //Depois mudar para o enum RiskLevel
-    private String severity;
-    private String alertType;
+    private RiskLevel severity;
+    private AlertType alertType;
     private LocalDate generatedDate;
 
-    public ClimateAlert(long idProperty, String description, String severity, String alertType, LocalDate generatedDate) {
+    public ClimateAlert(long idProperty, String description, RiskLevel severity, AlertType alertType, LocalDate generatedDate) {
         this.idProperty = idProperty;
         this.description = description;
         this.severity = severity;
@@ -43,19 +45,19 @@ public class ClimateAlert {
         this.description = description;
     }
 
-    public String getSeverity() {
+    public RiskLevel getSeverity() {
         return severity;
     }
 
-    public void setSeverity(String severity) {
+    public void setSeverity(RiskLevel severity) {
         this.severity = severity;
     }
 
-    public String getAlertType() {
+    public AlertType getAlertType() {
         return alertType;
     }
 
-    public void setAlertType(String alertType) {
+    public void setAlertType(AlertType alertType) {
         this.alertType = alertType;
     }
 

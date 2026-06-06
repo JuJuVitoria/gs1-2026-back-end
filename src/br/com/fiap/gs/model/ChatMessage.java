@@ -1,16 +1,17 @@
 package br.com.fiap.gs.model;
 
+import br.com.fiap.gs.enums.SenderType;
+
 import java.time.LocalDateTime;
 
 public class ChatMessage {
     private long id;
     private long idSession;
-    //Depois mudar para enum SenderType
-    private String senderType;
+    private SenderType senderType;
     private String messageContent;
     private LocalDateTime timestamp;
 
-    public ChatMessage(long idSession, String senderType, String messageContent, LocalDateTime timestamp) {
+    public ChatMessage(long idSession, SenderType senderType, String messageContent, LocalDateTime timestamp) {
         this.idSession = idSession;
         this.senderType = senderType;
         this.messageContent = messageContent;
@@ -33,11 +34,11 @@ public class ChatMessage {
         this.idSession = idSession;
     }
 
-    public String getSenderType() {
+    public SenderType getSenderType() {
         return senderType;
     }
 
-    public void setSenderType(String senderType) {
+    public void setSenderType(SenderType senderType) {
         this.senderType = senderType;
     }
 

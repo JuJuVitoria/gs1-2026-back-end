@@ -1,11 +1,12 @@
 package br.com.fiap.gs.model;
 
+import br.com.fiap.gs.enums.CropType;
+
 public class Property {
     private long id;
     private long idFarmer;
     private String farmName;
-    //depois alterar para o enum CropType
-    private String mainPlantation;
+    private CropType mainPlantation;
     private String latitude;
     private String longitude;
     private double sizeInHectares;
@@ -42,11 +43,11 @@ public class Property {
         this.farmName = farmName;
     }
 
-    public String getMainPlantation() {
+    public CropType getMainPlantation() {
         return mainPlantation;
     }
 
-    public void setMainPlantation(String mainPlantation) {
+    public void setMainPlantation(CropType mainPlantation) {
         this.mainPlantation = mainPlantation;
     }
 
