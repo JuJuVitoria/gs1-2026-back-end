@@ -10,6 +10,8 @@ public class Main {
     static ClimateAlert climateAlert1property1 = new ClimateAlert(0, "Risco de fortes chuvas!", "CRITICO", "CHUVA_INTENSA", LocalDate.now());
     static PlantationRecord plantationRecord1property1 = new PlantationRecord(0, "PLANTIO", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar finibus efficitur.", LocalDateTime.now());
     static AISuggestion aiSuggestionproperty1 = new AISuggestion(0, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar finibus efficitur.", LocalDate.now());
+    static ChatSession chatSession1 = new ChatSession(0,"Colheita de milho", LocalDate.now());
+    static ChatMessage chatMessage1 = new ChatMessage(0, "FARMER", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar finibus efficitur.", LocalDateTime.now());
 
     public static void main(String[] args) {
         System.out.println("TESTANDO AS CLASSES: \n");
@@ -19,5 +21,7 @@ public class Main {
         System.out.println("ClimateAlert: " + climateAlert1property1);
         System.out.println("PlantationRecord: " + plantationRecord1property1);
         System.out.println("AISuggestion: " + aiSuggestionproperty1);
+        System.out.println("ChatSession: " + chatSession1);
+        System.out.println("ChatMessage: " + chatMessage1);
     }
 }
