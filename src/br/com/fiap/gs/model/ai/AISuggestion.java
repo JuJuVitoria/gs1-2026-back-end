@@ -1,33 +1,47 @@
 package br.com.fiap.gs.model.ai;
 
+import br.com.fiap.gs.enums.SuggestionType;
+
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class AISuggestion {
-    private long id;
-    private long idProperty;
+    private UUID id;
+    private UUID idProperty;
     private String content;
     private String suggestionText;
+    private SuggestionType suggestionType;
     private LocalDate dataGenerated;
 
-    public AISuggestion(long idProperty, String suggestion, LocalDate dataGenerated) {
+    public AISuggestion(UUID idProperty, String suggestion, SuggestionType suggestionType, LocalDate dataGenerated) {
+        this.id = UUID.randomUUID();
         this.idProperty = idProperty;
         this.suggestionText = suggestion;
+        this.suggestionType = suggestionType;
         this.dataGenerated = dataGenerated;
     }
 
-    public long getId() {
+    public AISuggestion(UUID id, UUID idProperty, String suggestion, SuggestionType suggestionType, LocalDate dataGenerated) {
+        this.id = id;
+        this.idProperty = idProperty;
+        this.suggestionText = suggestion;
+        this.suggestionType = suggestionType;
+        this.dataGenerated = dataGenerated;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public long getIdProperty() {
+    public UUID getIdProperty() {
         return idProperty;
     }
 
-    public void setIdProperty(long idProperty) {
+    public void setIdProperty(UUID idProperty) {
         this.idProperty = idProperty;
     }
 
@@ -46,6 +60,10 @@ public class AISuggestion {
     public void setSuggestionText(String suggestionText) {
         this.suggestionText = suggestionText;
     }
+
+    public SuggestionType getSuggestionType() { return suggestionType; }
+
+    public void setSuggestionType(SuggestionType suggestionType) { this.suggestionType = suggestionType; }
 
     public LocalDate getDataGenerated() {
         return dataGenerated;
