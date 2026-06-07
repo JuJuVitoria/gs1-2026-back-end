@@ -4,36 +4,55 @@ import br.com.fiap.gs.enums.AlertType;
 import br.com.fiap.gs.enums.RiskLevel;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class ClimateAlert {
-    private long id;
-    private long idProperty;
+    private UUID id;
+    private UUID idProperty;
     private String description;
     private RiskLevel severity;
     private AlertType alertType;
     private LocalDate generatedDate;
+    private String status;
 
-    public ClimateAlert(long idProperty, String description, RiskLevel severity, AlertType alertType, LocalDate generatedDate) {
+    public ClimateAlert(UUID idProperty, String description,
+                        RiskLevel severity, AlertType alertType,
+                        LocalDate generatedDate, String status) {
+        this.id = UUID.randomUUID();
         this.idProperty = idProperty;
         this.description = description;
         this.severity = severity;
         this.alertType = alertType;
         this.generatedDate = generatedDate;
+        this.status = status;
     }
 
-    public long getId() {
+    public ClimateAlert(UUID id, UUID idProperty,
+                        String description, RiskLevel severity,
+                        AlertType alertType, LocalDate generatedDate,
+                        String status) {
+        this.id = id;
+        this.idProperty = idProperty;
+        this.description = description;
+        this.severity = severity;
+        this.alertType = alertType;
+        this.generatedDate = generatedDate;
+        this.status = status;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public long getIdProperty() {
+    public UUID getIdProperty() {
         return idProperty;
     }
 
-    public void setIdProperty(long idProperty) {
+    public void setIdProperty(UUID idProperty) {
         this.idProperty = idProperty;
     }
 
@@ -68,6 +87,10 @@ public class ClimateAlert {
     public void setGeneratedDate(LocalDate generatedDate) {
         this.generatedDate = generatedDate;
     }
+
+    public String getStatus() { return status; }
+
+    public void setStatus(String status) { this.status = status; }
 
     @Override
     public String toString() {

@@ -1,17 +1,21 @@
 package br.com.fiap.gs.repository.config;
 
 import br.com.fiap.gs.enums.ActivityType;
+import br.com.fiap.gs.enums.AlertType;
+import br.com.fiap.gs.enums.RiskLevel;
 import br.com.fiap.gs.enums.SuggestionType;
 import br.com.fiap.gs.model.Farmer;
 import br.com.fiap.gs.model.PlantationRecord;
 import br.com.fiap.gs.model.Property;
 import br.com.fiap.gs.model.ai.AISuggestion;
 import br.com.fiap.gs.model.climate.Agroclimatic;
+import br.com.fiap.gs.model.climate.ClimateAlert;
 import br.com.fiap.gs.repository.impl.FarmerRepository;
 import br.com.fiap.gs.repository.impl.ManagementNotebookRepository;
 import br.com.fiap.gs.repository.impl.PropertyRepository;
 import br.com.fiap.gs.repository.impl.ai.AISuggestionRepository;
 import br.com.fiap.gs.repository.impl.climate.AgroclimaticRepository;
+import br.com.fiap.gs.repository.impl.climate.ClimateAlertRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,6 +27,7 @@ public class DataSeeder {
     private final AgroclimaticRepository agroclimaticRepository;
     private final AISuggestionRepository aiSuggestionRepository;
     private final ManagementNotebookRepository managementNotebookRepository;
+    private final ClimateAlertRepository climateAlertRepository;
 
     //Mock Data - User 1
     public static final UUID FARMER_1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
@@ -30,11 +35,13 @@ public class DataSeeder {
     public static final UUID F1_PROPERTY_1_AGROCLIMATIC_1 = UUID.fromString("00000000-0000-0000-0000-000000000111");
     public static final UUID F1_PROPERTY_1_AISUGGESTION_1 = UUID.fromString("00000000-0000-0000-0000-000000001011");
     public static final UUID F1_PROPERTY_1_PLANTATIONRECORD_1 = UUID.fromString("00000000-0000-0000-0000-000000010011");
+    public static final UUID F1_PROPERTY_1_ALERT_1 = UUID.fromString("00000000-0000-0000-0000-000000100011");
 
     public static final UUID FARMER_1_PROPERTY_2  = UUID.fromString("00000000-0000-0000-0000-000000000021");
     public static final UUID F1_PROPERTY_2_AGROCLIMATIC_1 = UUID.fromString("00000000-0000-0000-0000-000000000121");
     public static final UUID F1_PROPERTY_2_AISUGGESTION_1 = UUID.fromString("00000000-0000-0000-0000-000000001021");
     public static final UUID F1_PROPERTY_2_PLANTATIONRECORD_1 = UUID.fromString("00000000-0000-0000-0000-000000010021");
+    public static final UUID F1_PROPERTY_2_ALERT_1 = UUID.fromString("00000000-0000-0000-0000-000000100021");
 
     //Mock Data - User 2
     public static final UUID FARMER_2  = UUID.fromString("00000000-0000-0000-0000-000000000002");
@@ -42,17 +49,20 @@ public class DataSeeder {
     public static final UUID F2_PROPERTY_1_AGROCLIMATIC_1 = UUID.fromString("00000000-0000-0000-0000-000000000112");
     public static final UUID F2_PROPERTY_1_AISUGGESTION_1 = UUID.fromString("00000000-0000-0000-0000-000000001012");
     public static final UUID F2_PROPERTY_1_PLANTATIONRECORD_1 = UUID.fromString("00000000-0000-0000-0000-000000010012");
+    public static final UUID F2_PROPERTY_1_ALERT_1 = UUID.fromString("00000000-0000-0000-0000-000000100012");
 
     public DataSeeder(FarmerRepository farmerRepository,
                       PropertyRepository propertyRepository,
                       AgroclimaticRepository agroclimaticRepository,
                       AISuggestionRepository aiSuggestionRepository,
-                      ManagementNotebookRepository managementNotebookRepository) {
+                      ManagementNotebookRepository managementNotebookRepository,
+                      ClimateAlertRepository climateAlertRepository) {
         this.farmerRepository = farmerRepository;
         this.propertyRepository = propertyRepository;
         this.agroclimaticRepository = agroclimaticRepository;
         this.aiSuggestionRepository = aiSuggestionRepository;
         this.managementNotebookRepository = managementNotebookRepository;
+        this.climateAlertRepository = climateAlertRepository;
         seed();
     }
 
@@ -65,6 +75,7 @@ public class DataSeeder {
         PlantationRecord f1property1PlantionRecord1 = new PlantationRecord(F1_PROPERTY_1_PLANTATIONRECORD_1, FARMER_1_PROPERTY_1, ActivityType.PLANTIO,
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque turpis leo, aliquet vel ipsum in, dictum tincidunt nulla.",
                 LocalDateTime.now());
+        ClimateAlert f1property1ClimateAlert1 = new ClimateAlert(F1_PROPERTY_1_ALERT_1, FARMER_1_PROPERTY_1, "Risco de geada severa", RiskLevel.ALTO,  AlertType.GRANIZO, LocalDate.now(),"ACTIVE");
         Property farmer1Property2 = new Property(FARMER_1_PROPERTY_2, FARMER_1, "Chácara das flores", -26.01328659237649, -51.4017677307129);
         Agroclimatic f1property2Agroclimatic1 = new Agroclimatic(F1_PROPERTY_2_AGROCLIMATIC_1, FARMER_1_PROPERTY_2, LocalDate.now(), 21, 8, 10, 67, 6);
         AISuggestion f1property2AISuggestion1 = new AISuggestion(F1_PROPERTY_2_AISUGGESTION_1, FARMER_1_PROPERTY_2, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque turpis leo, aliquet vel ipsum in, dictum tincidunt nulla.",
@@ -72,6 +83,7 @@ public class DataSeeder {
         PlantationRecord f1property2PlantionRecord1 = new PlantationRecord(F1_PROPERTY_2_PLANTATIONRECORD_1, FARMER_1_PROPERTY_2, ActivityType.PLANTIO,
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque turpis leo, aliquet vel ipsum in, dictum tincidunt nulla.",
                 LocalDateTime.now());
+        ClimateAlert f1property2ClimateAlert1 = new ClimateAlert(F1_PROPERTY_2_ALERT_1, FARMER_1_PROPERTY_2, "Risco de geada severa", RiskLevel.ALTO,  AlertType.GRANIZO, LocalDate.now(),"ACTIVE");
 
         Farmer farmer2 = new Farmer(FARMER_2, "João Costa", "joao@sistema.com", "senha456");
         Property farmer2Property1 = new Property(FARMER_2_PROPERTY_1, FARMER_2, "Pedacinho do Céu", -20.59807974803205, -49.70712661743165);
@@ -81,6 +93,7 @@ public class DataSeeder {
         PlantationRecord f2property1PlantionRecord1 = new PlantationRecord(F2_PROPERTY_1_PLANTATIONRECORD_1, FARMER_2_PROPERTY_1, ActivityType.PLANTIO,
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque turpis leo, aliquet vel ipsum in, dictum tincidunt nulla.",
                 LocalDateTime.now());
+        ClimateAlert f2property1ClimateAlert1 = new ClimateAlert(F2_PROPERTY_1_ALERT_1, FARMER_2_PROPERTY_1, "Risco de geada severa", RiskLevel.ALTO,  AlertType.GRANIZO, LocalDate.now(),"ACTIVE");
 
 
         //USER 1
@@ -90,11 +103,14 @@ public class DataSeeder {
         agroclimaticRepository.save(f1property1Agroclimatic1);
         aiSuggestionRepository.save(f1property1AISuggestion1);
         managementNotebookRepository.save(f1property1PlantionRecord1);
+        climateAlertRepository.save(f1property1ClimateAlert1);
+
         //USER 1 - PROPERTY 2
         propertyRepository.save(farmer1Property2);
         agroclimaticRepository.save(f1property2Agroclimatic1);
         aiSuggestionRepository.save(f1property2AISuggestion1);
         managementNotebookRepository.save(f1property2PlantionRecord1);
+        climateAlertRepository.save(f1property2ClimateAlert1);
 
         //USER 2
         farmerRepository.save(farmer2);
@@ -103,5 +119,6 @@ public class DataSeeder {
         agroclimaticRepository.save(f2property1Agroclimatic1);
         aiSuggestionRepository.save(f2property1AISuggestion1);
         managementNotebookRepository.save(f2property1PlantionRecord1);
+        climateAlertRepository.save(f2property1ClimateAlert1);
     }
 }
