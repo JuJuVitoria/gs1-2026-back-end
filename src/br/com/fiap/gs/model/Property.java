@@ -2,36 +2,47 @@ package br.com.fiap.gs.model;
 
 import br.com.fiap.gs.enums.CropType;
 
+import java.util.UUID;
+
 public class Property {
-    private long id;
-    private long idFarmer;
+    private UUID id;
+    private UUID idFarmer;
     private String farmName;
     private CropType mainPlantation;
-    private String latitude;
-    private String longitude;
+    private double latitude;
+    private double longitude;
     private double sizeInHectares;
     private String state;
 
-    public Property(long idFarmer, String farmName, String latitude, String longitude) {
+    public Property(UUID idFarmer, String farmName, double latitude, double longitude) {
+        this.id = UUID.randomUUID();
         this.idFarmer = idFarmer;
         this.farmName = farmName;
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public long getId() {
+    public Property(UUID idProperty, UUID idFarmer, String farmName, double latitude, double longitude) {
+        this.id = idProperty;
+        this.idFarmer = idFarmer;
+        this.farmName = farmName;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public long getIdFarmer() {
+    public UUID getIdFarmer() {
         return idFarmer;
     }
 
-    public void setIdFarmer(long idFarmer) {
+    public void setIdFarmer(UUID idFarmer) {
         this.idFarmer = idFarmer;
     }
 
@@ -51,19 +62,19 @@ public class Property {
         this.mainPlantation = mainPlantation;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
