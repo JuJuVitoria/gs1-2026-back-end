@@ -1,5 +1,6 @@
 import br.com.fiap.gs.repository.config.DataSeeder;
 import br.com.fiap.gs.repository.impl.FarmerRepository;
+import br.com.fiap.gs.repository.impl.ManagementNotebookRepository;
 import br.com.fiap.gs.repository.impl.PropertyRepository;
 import br.com.fiap.gs.repository.impl.ai.AISuggestionRepository;
 import br.com.fiap.gs.repository.impl.climate.AgroclimaticRepository;
@@ -10,7 +11,12 @@ public class Main {
         PropertyRepository propertyRepository = new PropertyRepository();
         AgroclimaticRepository agroclimaticRepository = new AgroclimaticRepository();
         AISuggestionRepository aiSuggestionRepository = new AISuggestionRepository();
-        new DataSeeder(farmerRepository, propertyRepository, agroclimaticRepository, aiSuggestionRepository);
+        ManagementNotebookRepository managementNotebookRepository = new ManagementNotebookRepository();
+        new DataSeeder(farmerRepository,
+                propertyRepository,
+                agroclimaticRepository,
+                aiSuggestionRepository,
+                managementNotebookRepository);
 
         // Buscar todas as propriedades do Farmer 1
         System.out.println("=== Propriedades da Madalena ===");
@@ -18,6 +24,7 @@ public class Main {
                 .forEach(p -> System.out.println("- " + p.getFarmName()));
         System.out.println("\nPrevisão do tempo: " + agroclimaticRepository.findTodayForecastByProperty(DataSeeder.FARMER_1_PROPERTY_1));
         System.out.println("Sugestão IA: " + aiSuggestionRepository.findByPropertyId(DataSeeder.FARMER_1_PROPERTY_1));
+        System.out.println("Anotações: " + managementNotebookRepository.findAllNotesByPropertyID(DataSeeder.FARMER_1_PROPERTY_1));
 
         // Buscar todas as propriedades do Farmer 2
         System.out.println("\n \n=== Propriedades do João ===");

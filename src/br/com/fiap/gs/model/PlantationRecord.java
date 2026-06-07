@@ -3,35 +3,44 @@ package br.com.fiap.gs.model;
 import br.com.fiap.gs.enums.ActivityType;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class PlantationRecord {
-    private long id;
-    private long idProperty;
-    //Depois mudar para o enum ActivityType
+    private UUID id;
+    private UUID idProperty;
     private ActivityType activityType;
     private String content;
     private LocalDateTime registrationDate;
 
-    public PlantationRecord(long idProperty, ActivityType activityType, String content, LocalDateTime registrationDate) {
+    public PlantationRecord(UUID idProperty, ActivityType activityType, String content, LocalDateTime registrationDate) {
+        this.id = UUID.randomUUID();
         this.idProperty = idProperty;
         this.activityType = activityType;
         this.content = content;
         this.registrationDate = registrationDate;
     }
 
-    public long getId() {
+    public PlantationRecord(UUID id, UUID idProperty, ActivityType activityType, String content, LocalDateTime registrationDate) {
+        this.id = id;
+        this.idProperty = idProperty;
+        this.activityType = activityType;
+        this.content = content;
+        this.registrationDate = registrationDate;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public long getIdProperty() {
+    public UUID getIdProperty() {
         return idProperty;
     }
 
-    public void setIdProperty(long idProperty) {
+    public void setIdProperty(UUID idProperty) {
         this.idProperty = idProperty;
     }
 
