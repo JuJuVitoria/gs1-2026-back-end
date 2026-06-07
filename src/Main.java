@@ -1,15 +1,14 @@
-import br.com.fiap.gs.model.*;
-import br.com.fiap.gs.repository.DataSeeder;
-import br.com.fiap.gs.repository.FarmerRepository;
-import br.com.fiap.gs.repository.PropertyRepository;
-
-import java.util.UUID;
+import br.com.fiap.gs.repository.config.DataSeeder;
+import br.com.fiap.gs.repository.impl.FarmerRepository;
+import br.com.fiap.gs.repository.impl.PropertyRepository;
+import br.com.fiap.gs.repository.impl.climate.AgroclimaticRepository;
 
 public class Main {
     public static void main(String[] args) {
         FarmerRepository farmerRepository = new FarmerRepository();
         PropertyRepository propertyRepository = new PropertyRepository();
-        new DataSeeder(farmerRepository, propertyRepository);
+        AgroclimaticRepository agroclimaticRepository = new AgroclimaticRepository();
+        new DataSeeder(farmerRepository, propertyRepository, agroclimaticRepository);
 
         System.out.println("Teste findAll: ");
         farmerRepository.findAll()
@@ -21,10 +20,12 @@ public class Main {
         System.out.println("=== Propriedades da Madalena ===");
         propertyRepository.findAllByFarmerID(DataSeeder.FARMER_1)
                 .forEach(p -> System.out.println("- " + p.getFarmName()));
+        System.out.println(agroclimaticRepository.findTodayForecastByProperty(DataSeeder.FARMER_1_PROPERTY_1));
 
         // Buscar todas as propriedades do Farmer 2
         System.out.println("=== Propriedades do João ===");
         propertyRepository.findAllByFarmerID(DataSeeder.FARMER_2)
                 .forEach(p -> System.out.println("- " + p.getFarmName()));
+        System.out.println(agroclimaticRepository.findTodayForecastByProperty(DataSeeder.FARMER_2_PROPERTY_1));
     }
 }

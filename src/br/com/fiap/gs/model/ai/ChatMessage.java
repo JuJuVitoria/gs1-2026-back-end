@@ -1,4 +1,4 @@
-package br.com.fiap.gs.model;
+package br.com.fiap.gs.model.ai;
 
 import br.com.fiap.gs.enums.SenderType;
 

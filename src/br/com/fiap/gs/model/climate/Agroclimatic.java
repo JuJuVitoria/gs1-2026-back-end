@@ -1,18 +1,22 @@
-package br.com.fiap.gs.model;
+package br.com.fiap.gs.model.climate;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.UUID;
 
 public class Agroclimatic {
-    private long id;
-    private long idProperty;
-    private LocalDateTime forecastDate;
+    private UUID id;
+    private UUID idProperty;
+    private LocalDate forecastDate;
     private int maxTempeture;
     private int minTempeture;
     private double precipitation;
     private int airHumidityPercentage;
     private double windSpeedKMH;
 
-    public Agroclimatic(long idProperty, LocalDateTime forecastDate, int maxTempeture, int minTempeture, double precipitation, int airHumidityPercentage, double windSpeedKMH) {
+    public Agroclimatic(UUID idProperty, LocalDate forecastDate, int maxTempeture,
+                        int minTempeture, double precipitation, int airHumidityPercentage,
+                        double windSpeedKMH) {
+        this.id = UUID.randomUUID();
         this.idProperty = idProperty;
         this.forecastDate = forecastDate;
         this.maxTempeture = maxTempeture;
@@ -22,27 +26,40 @@ public class Agroclimatic {
         this.windSpeedKMH = windSpeedKMH;
     }
 
-    public long getId() {
+    public Agroclimatic(UUID id, UUID idProperty, LocalDate forecastDate, int maxTempeture,
+                        int minTempeture, double precipitation, int airHumidityPercentage,
+                        double windSpeedKMH) {
+        this.id = id;
+        this.idProperty = idProperty;
+        this.forecastDate = forecastDate;
+        this.maxTempeture = maxTempeture;
+        this.minTempeture = minTempeture;
+        this.precipitation = precipitation;
+        this.airHumidityPercentage = airHumidityPercentage;
+        this.windSpeedKMH = windSpeedKMH;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public long getIdProperty() {
+    public UUID getIdProperty() {
         return idProperty;
     }
 
-    public void setIdProperty(long idProperty) {
+    public void setIdProperty(UUID idProperty) {
         this.idProperty = idProperty;
     }
 
-    public LocalDateTime getForecastDate() {
+    public LocalDate getForecastDate() {
         return forecastDate;
     }
 
-    public void setForecastDate(LocalDateTime forecastDate) {
+    public void setForecastDate(LocalDate forecastDate) {
         this.forecastDate = forecastDate;
     }
 
@@ -88,6 +105,9 @@ public class Agroclimatic {
 
     @Override
     public String toString() {
-        return "Previsão do dia " + this.forecastDate + " - Temperatura máxima do dia: " + this.maxTempeture + " | Temperatura minima do dia: " + this.minTempeture + " - Precipitação: " + this.precipitation + " | Humidade: " + this.airHumidityPercentage + " | Vento km/h: " + this.windSpeedKMH + " - ID da propriedade: " + this.idProperty;
+        return "Previsão do dia " + this.forecastDate + " - Temperatura máxima do dia: " +
+                this.maxTempeture + " | Temperatura minima do dia: " + this.minTempeture +
+                " - Precipitação: " + this.precipitation + " | Humidade: " + this.airHumidityPercentage +
+                " | Vento km/h: " + this.windSpeedKMH + " - ID da propriedade: " + this.idProperty;
     }
 }

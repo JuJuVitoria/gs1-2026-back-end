@@ -1,4 +1,4 @@
-package br.com.fiap.gs.model;
+package br.com.fiap.gs.model.climate;
 
 import br.com.fiap.gs.enums.AlertType;
 import br.com.fiap.gs.enums.RiskLevel;

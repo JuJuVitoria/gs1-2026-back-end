@@ -1,4 +1,4 @@
-package br.com.fiap.gs.model;
+package br.com.fiap.gs.model.ai;
 
 import java.time.LocalDate;
 

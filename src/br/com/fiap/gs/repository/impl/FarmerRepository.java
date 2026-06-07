@@ -1,4 +1,4 @@
-package br.com.fiap.gs.repository;
+package br.com.fiap.gs.repository.impl;
 
 import br.com.fiap.gs.model.Farmer;
 
