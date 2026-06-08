@@ -3,6 +3,7 @@ import br.com.fiap.gs.repository.impl.FarmerRepository;
 import br.com.fiap.gs.repository.impl.ManagementNotebookRepository;
 import br.com.fiap.gs.repository.impl.PropertyRepository;
 import br.com.fiap.gs.repository.impl.ai.AISuggestionRepository;
+import br.com.fiap.gs.repository.impl.ai.ChatSessionRepository;
 import br.com.fiap.gs.repository.impl.climate.AgroclimaticRepository;
 import br.com.fiap.gs.repository.impl.climate.ClimateAlertRepository;
 
@@ -14,12 +15,14 @@ public class Main {
         AISuggestionRepository aiSuggestionRepository = new AISuggestionRepository();
         ManagementNotebookRepository managementNotebookRepository = new ManagementNotebookRepository();
         ClimateAlertRepository climateAlertRepository = new ClimateAlertRepository();
+        ChatSessionRepository chatSessionRepository = new ChatSessionRepository();
         new DataSeeder(farmerRepository,
                 propertyRepository,
                 agroclimaticRepository,
                 aiSuggestionRepository,
                 managementNotebookRepository,
-                climateAlertRepository);
+                climateAlertRepository,
+                chatSessionRepository);
 
         // Buscar todas as propriedades do Farmer 1
         System.out.println("=== Propriedades da Madalena ===");
@@ -29,6 +32,7 @@ public class Main {
         System.out.println("Sugestão IA: " + aiSuggestionRepository.findByPropertyId(DataSeeder.FARMER_1_PROPERTY_1));
         System.out.println("Anotações: " + managementNotebookRepository.findAllNotesByPropertyID(DataSeeder.FARMER_1_PROPERTY_1));
         System.out.println("Alertas: " + climateAlertRepository.findActiveByPropertyId(DataSeeder.FARMER_1_PROPERTY_1));
+        System.out.println("Chat Session: " + chatSessionRepository.findAllByFarmerId(DataSeeder.FARMER_1));
 
         // Buscar todas as propriedades do Farmer 2
         System.out.println("\n \n=== Propriedades do João ===");
@@ -37,5 +41,6 @@ public class Main {
         System.out.println("\nPrevisão do tempo: " + agroclimaticRepository.findTodayForecastByProperty(DataSeeder.FARMER_2_PROPERTY_1));
         System.out.println("Sugestão IA: " + aiSuggestionRepository.findByPropertyId(DataSeeder.FARMER_2_PROPERTY_1));
         System.out.println("Alertas: " + climateAlertRepository.findActiveByPropertyId(DataSeeder.FARMER_1_PROPERTY_1));
+        System.out.println("Chat Session: " + chatSessionRepository.findAllByFarmerId(DataSeeder.FARMER_2));
     }
 }
