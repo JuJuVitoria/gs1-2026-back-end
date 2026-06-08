@@ -1,5 +1,7 @@
+import br.com.fiap.gs.enums.ActivityType;
 import br.com.fiap.gs.model.climate.Agroclimatic;
 import br.com.fiap.gs.model.climate.ClimateAlert;
+import br.com.fiap.gs.model.user.PlantationRecord;
 import br.com.fiap.gs.repository.config.DataSeeder;
 import br.com.fiap.gs.repository.impl.ai.ChatMessageRepository;
 import br.com.fiap.gs.repository.impl.user.FarmerRepository;
@@ -11,9 +13,14 @@ import br.com.fiap.gs.repository.impl.climate.AgroclimaticRepository;
 import br.com.fiap.gs.repository.impl.climate.ClimateAlertRepository;
 import br.com.fiap.gs.service.impl.ClimateServiceImpl;
 import br.com.fiap.gs.service.impl.FarmerServiceImpl;
+import br.com.fiap.gs.service.impl.ManagementNotebookServiceImpl;
 import br.com.fiap.gs.service.impl.PropertyServiceImpl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import static br.com.fiap.gs.repository.config.DataSeeder.FARMER_1_PROPERTY_1;
 
 public class Main {
     public static void main(String[] args) {
@@ -29,6 +36,7 @@ public class Main {
         FarmerServiceImpl farmerService = new FarmerServiceImpl(farmerRepository);
         PropertyServiceImpl propertyService = new PropertyServiceImpl(propertyRepository);
         ClimateServiceImpl climateService = new ClimateServiceImpl(agroclimaticRepository, climateAlertRepository);
+        ManagementNotebookServiceImpl managementService = new ManagementNotebookServiceImpl(managementNotebookRepository);
 
         new DataSeeder(farmerRepository,
                 propertyRepository,
@@ -56,7 +64,7 @@ public class Main {
         System.out.println("Propriedades: " + propertyService.listPropertiesByProducer(farmerService.getLoggedFarmer().getId()));
 
         Agroclimatic forecast = new Agroclimatic(
-                DataSeeder.FARMER_1_PROPERTY_1,
+                FARMER_1_PROPERTY_1,
                 LocalDate.now(),
                 25,
                 2,
@@ -75,15 +83,21 @@ public class Main {
                     + " | Risco: "         + alert.getSeverity());
         }
 
-        climateService.getActiveAlerts(DataSeeder.FARMER_1_PROPERTY_1)
+        climateService.getActiveAlerts(FARMER_1_PROPERTY_1)
                 .ifPresentOrElse(
                         a -> System.out.println("\nAlerta ativo: " + a.getDescription()),
                         () -> System.out.println("Nenhum alerta ativo")
                 );
 
         System.out.println("\nHistórico de previsões:");
-        climateService.consultHistory(DataSeeder.FARMER_1_PROPERTY_1)
+        climateService.consultHistory(DataSeeder.FARMER_3_PROPERTY_1)
                 .forEach(f -> System.out.println("   → " + f.getForecastDate()
                         + " | Chuva: " + f.getPrecipitation() + "mm"));
+
+
+        System.out.println("\nAnotações: ");
+        managementService.listNotebookByProperty(DataSeeder.FARMER_3_PROPERTY_1)
+                .forEach(n -> System.out.println("   → " + n.getContent()
+                + " | Data da anotação: " + n.getRegistrationDate()));
     }
 }
