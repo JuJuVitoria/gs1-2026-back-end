@@ -1,7 +1,8 @@
 import br.com.fiap.gs.repository.config.DataSeeder;
-import br.com.fiap.gs.repository.impl.FarmerRepository;
-import br.com.fiap.gs.repository.impl.ManagementNotebookRepository;
-import br.com.fiap.gs.repository.impl.PropertyRepository;
+import br.com.fiap.gs.repository.impl.ai.ChatMessageRepository;
+import br.com.fiap.gs.repository.impl.user.FarmerRepository;
+import br.com.fiap.gs.repository.impl.user.ManagementNotebookRepository;
+import br.com.fiap.gs.repository.impl.user.PropertyRepository;
 import br.com.fiap.gs.repository.impl.ai.AISuggestionRepository;
 import br.com.fiap.gs.repository.impl.ai.ChatSessionRepository;
 import br.com.fiap.gs.repository.impl.climate.AgroclimaticRepository;
@@ -16,13 +17,15 @@ public class Main {
         ManagementNotebookRepository managementNotebookRepository = new ManagementNotebookRepository();
         ClimateAlertRepository climateAlertRepository = new ClimateAlertRepository();
         ChatSessionRepository chatSessionRepository = new ChatSessionRepository();
+        ChatMessageRepository chatMessageRepository = new ChatMessageRepository();
         new DataSeeder(farmerRepository,
                 propertyRepository,
                 agroclimaticRepository,
                 aiSuggestionRepository,
                 managementNotebookRepository,
                 climateAlertRepository,
-                chatSessionRepository);
+                chatSessionRepository,
+                chatMessageRepository);
 
         // Buscar todas as propriedades do Farmer 1
         System.out.println("=== Propriedades da Madalena ===");
@@ -33,6 +36,7 @@ public class Main {
         System.out.println("Anotações: " + managementNotebookRepository.findAllNotesByPropertyID(DataSeeder.FARMER_1_PROPERTY_1));
         System.out.println("Alertas: " + climateAlertRepository.findActiveByPropertyId(DataSeeder.FARMER_1_PROPERTY_1));
         System.out.println("Chat Session: " + chatSessionRepository.findAllByFarmerId(DataSeeder.FARMER_1));
+        System.out.println("Chat Message: " + chatMessageRepository.findAllBySessionId(DataSeeder.F1_CHATSESSION1));
 
         // Buscar todas as propriedades do Farmer 2
         System.out.println("\n \n=== Propriedades do João ===");

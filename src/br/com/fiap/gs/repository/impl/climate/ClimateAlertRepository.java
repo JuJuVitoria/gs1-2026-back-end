@@ -2,7 +2,7 @@ package br.com.fiap.gs.repository.impl.climate;
 
 import br.com.fiap.gs.enums.AlertType;
 import br.com.fiap.gs.model.climate.ClimateAlert;
-import br.com.fiap.gs.repository.impl.InMemoryRepository;
+import br.com.fiap.gs.repository.InMemoryRepository;
 
 import java.util.List;
 import java.util.UUID;

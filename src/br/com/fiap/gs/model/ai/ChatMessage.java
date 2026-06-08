@@ -3,34 +3,44 @@ package br.com.fiap.gs.model.ai;
 import br.com.fiap.gs.enums.SenderType;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class ChatMessage {
-    private long id;
-    private long idSession;
+    private UUID id;
+    private UUID idSession;
     private SenderType senderType;
     private String messageContent;
     private LocalDateTime timestamp;
 
-    public ChatMessage(long idSession, SenderType senderType, String messageContent, LocalDateTime timestamp) {
+    public ChatMessage(UUID idSession, SenderType senderType, String messageContent, LocalDateTime timestamp) {
+        this.id = UUID.randomUUID();
         this.idSession = idSession;
         this.senderType = senderType;
         this.messageContent = messageContent;
         this.timestamp = timestamp;
     }
 
-    public long getId() {
+    public ChatMessage(UUID id, UUID idSession, SenderType senderType, String messageContent, LocalDateTime timestamp) {
+        this.id = id;
+        this.idSession = idSession;
+        this.senderType = senderType;
+        this.messageContent = messageContent;
+        this.timestamp = timestamp;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public long getIdSession() {
+    public UUID getIdSession() {
         return idSession;
     }
 
-    public void setIdSession(long idSession) {
+    public void setIdSession(UUID idSession) {
         this.idSession = idSession;
     }
 

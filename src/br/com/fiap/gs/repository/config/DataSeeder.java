@@ -1,19 +1,18 @@
 package br.com.fiap.gs.repository.config;
 
-import br.com.fiap.gs.enums.ActivityType;
-import br.com.fiap.gs.enums.AlertType;
-import br.com.fiap.gs.enums.RiskLevel;
-import br.com.fiap.gs.enums.SuggestionType;
-import br.com.fiap.gs.model.Farmer;
-import br.com.fiap.gs.model.PlantationRecord;
-import br.com.fiap.gs.model.Property;
+import br.com.fiap.gs.enums.*;
+import br.com.fiap.gs.model.ai.ChatMessage;
+import br.com.fiap.gs.model.user.Farmer;
+import br.com.fiap.gs.model.user.PlantationRecord;
+import br.com.fiap.gs.model.user.Property;
 import br.com.fiap.gs.model.ai.AISuggestion;
 import br.com.fiap.gs.model.ai.ChatSession;
 import br.com.fiap.gs.model.climate.Agroclimatic;
 import br.com.fiap.gs.model.climate.ClimateAlert;
-import br.com.fiap.gs.repository.impl.FarmerRepository;
-import br.com.fiap.gs.repository.impl.ManagementNotebookRepository;
-import br.com.fiap.gs.repository.impl.PropertyRepository;
+import br.com.fiap.gs.repository.impl.ai.ChatMessageRepository;
+import br.com.fiap.gs.repository.impl.user.FarmerRepository;
+import br.com.fiap.gs.repository.impl.user.ManagementNotebookRepository;
+import br.com.fiap.gs.repository.impl.user.PropertyRepository;
 import br.com.fiap.gs.repository.impl.ai.AISuggestionRepository;
 import br.com.fiap.gs.repository.impl.ai.ChatSessionRepository;
 import br.com.fiap.gs.repository.impl.climate.AgroclimaticRepository;
@@ -31,31 +30,40 @@ public class DataSeeder {
     private final ManagementNotebookRepository managementNotebookRepository;
     private final ClimateAlertRepository climateAlertRepository;
     private final ChatSessionRepository chatSessionRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     //Mock Data - User 1
     public static final UUID FARMER_1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+
+    public static final UUID F1_CHATSESSION1 = UUID.fromString("00000000-0000-0000-0000-000001000001");
+    public static final UUID F1_CS1_MESSAGE1 = UUID.fromString("00000000-0000-0000-0000-000011000001");
+    public static final UUID F1_CHATSESSION2 = UUID.fromString("00000000-0000-0000-0000-000002000001");
+    public static final UUID F1_CS2_MESSAGE1 = UUID.fromString("00000000-0000-0000-0000-000012000001");
+
     public static final UUID FARMER_1_PROPERTY_1  = UUID.fromString("00000000-0000-0000-0000-000000000011");
     public static final UUID F1_P1_AGROCLIMATIC1 = UUID.fromString("00000000-0000-0000-0000-000000000111");
     public static final UUID F1_P1_AISUGGESTION1 = UUID.fromString("00000000-0000-0000-0000-000000001011");
     public static final UUID F1_P1_PLANTATIONRECORD1 = UUID.fromString("00000000-0000-0000-0000-000000010011");
     public static final UUID F1_P1_ALERT1 = UUID.fromString("00000000-0000-0000-0000-000000100011");
-    public static final UUID F1_CHATSESSION1 = UUID.fromString("00000000-0000-0000-0000-000001000011");
 
     public static final UUID FARMER_1_PROPERTY_2  = UUID.fromString("00000000-0000-0000-0000-000000000021");
     public static final UUID F1_P2_AGROCLIMATIC1 = UUID.fromString("00000000-0000-0000-0000-000000000121");
     public static final UUID F1_P2_AISUGGESTION1 = UUID.fromString("00000000-0000-0000-0000-000000001021");
     public static final UUID F1_P2_PLANTATIONRECORD1 = UUID.fromString("00000000-0000-0000-0000-000000010021");
     public static final UUID F1_P2_ALERT1 = UUID.fromString("00000000-0000-0000-0000-000000100021");
-    public static final UUID F1_CHATSESSION2 = UUID.fromString("00000000-0000-0000-0000-000001000021");
+
 
     //Mock Data - User 2
     public static final UUID FARMER_2  = UUID.fromString("00000000-0000-0000-0000-000000000002");
+
+    public static final UUID F2_CHATSESSION1 = UUID.fromString("00000000-0000-0000-0000-000001000002");
+    public static final UUID F2_CS1_MESSAGE1 = UUID.fromString("00000000-0000-0000-0000-000011000002");
+
     public static final UUID FARMER_2_PROPERTY_1  = UUID.fromString("00000000-0000-0000-0000-000000000012");
     public static final UUID F2_P1_AGROCLIMATIC1 = UUID.fromString("00000000-0000-0000-0000-000000000112");
     public static final UUID F2_P1_AISUGGESTION1 = UUID.fromString("00000000-0000-0000-0000-000000001012");
     public static final UUID F2_P1_PLANTATIONRECORD1 = UUID.fromString("00000000-0000-0000-0000-000000010012");
     public static final UUID F2_P1_ALERT1 = UUID.fromString("00000000-0000-0000-0000-000000100012");
-    public static final UUID F2_CHATSESSION1 = UUID.fromString("00000000-0000-0000-0000-000001000012");
 
     public DataSeeder(FarmerRepository farmerRepository,
                       PropertyRepository propertyRepository,
@@ -63,7 +71,8 @@ public class DataSeeder {
                       AISuggestionRepository aiSuggestionRepository,
                       ManagementNotebookRepository managementNotebookRepository,
                       ClimateAlertRepository climateAlertRepository,
-                      ChatSessionRepository chatSessionRepository) {
+                      ChatSessionRepository chatSessionRepository,
+                      ChatMessageRepository chatMessageRepository) {
         this.farmerRepository = farmerRepository;
         this.propertyRepository = propertyRepository;
         this.agroclimaticRepository = agroclimaticRepository;
@@ -71,6 +80,7 @@ public class DataSeeder {
         this.managementNotebookRepository = managementNotebookRepository;
         this.climateAlertRepository = climateAlertRepository;
         this.chatSessionRepository = chatSessionRepository;
+        this.chatMessageRepository = chatMessageRepository;
         seed();
     }
 
@@ -78,6 +88,21 @@ public class DataSeeder {
         //USER 1
         Farmer farmer1 = new Farmer(FARMER_1, "Madalena Silva", "madalena@sistema.com", "senha123");
         farmerRepository.save(farmer1);
+
+        //USER 2 - AI CHAT
+        ChatSession f1ChatSession1 = new ChatSession(F1_CHATSESSION1, FARMER_1, "Geadas no inverno", LocalDate.now());
+        chatSessionRepository.save(f1ChatSession1);
+        ChatMessage f1CS1Message1 = new ChatMessage(F1_CS1_MESSAGE1, F1_CHATSESSION1, SenderType.FARMER,
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque turpis leo, aliquet vel ipsum in, dictum tincidunt nulla.",
+                LocalDateTime.now());
+        chatMessageRepository.save(f1CS1Message1);
+
+        ChatSession f1ChatSession2 = new ChatSession(F1_CHATSESSION2, FARMER_1, "Geadas no inverno", LocalDate.now());
+        chatSessionRepository.save(f1ChatSession2);
+        ChatMessage f1CS2Message1 = new ChatMessage(F1_CS2_MESSAGE1, F1_CHATSESSION2, SenderType.FARMER,
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque turpis leo, aliquet vel ipsum in, dictum tincidunt nulla.",
+                LocalDateTime.now());
+        chatMessageRepository.save(f1CS2Message1);
 
         //USER 1 - PROPERTY 1
         Property farmer1Property1 = new Property(FARMER_1_PROPERTY_1, FARMER_1, "Recanto da luz",
@@ -97,8 +122,6 @@ public class DataSeeder {
         ClimateAlert f1property1ClimateAlert1 = new ClimateAlert(F1_P1_ALERT1, FARMER_1_PROPERTY_1,
                 "Risco de geada severa", RiskLevel.ALTO,  AlertType.GRANIZO, LocalDate.now(),"ACTIVE");
         climateAlertRepository.save(f1property1ClimateAlert1);
-        ChatSession f1ChatSession1 = new ChatSession(F1_CHATSESSION1, FARMER_1, "Geadas no inverno", LocalDate.now());
-        chatSessionRepository.save(f1ChatSession1);
 
         //USER 1 - PROPERTY 2
         Property farmer1Property2 = new Property(FARMER_1_PROPERTY_2, FARMER_1, "Chácara das flores",
@@ -118,39 +141,32 @@ public class DataSeeder {
         ClimateAlert f1property2ClimateAlert1 = new ClimateAlert(F1_P2_ALERT1, FARMER_1_PROPERTY_2,
                 "Risco de geada severa", RiskLevel.ALTO,  AlertType.GRANIZO, LocalDate.now(),"ACTIVE");
         climateAlertRepository.save(f1property2ClimateAlert1);
-        ChatSession f1ChatSession2 = new ChatSession(F1_CHATSESSION2, FARMER_1, "Geadas no inverno", LocalDate.now());
-        chatSessionRepository.save(f1ChatSession2);
 
         //USER 2
         Farmer farmer2 = new Farmer(FARMER_2, "João Costa", "joao@sistema.com", "senha456");
+        farmerRepository.save(farmer2);
+
+        //USER 2 - AI CHAT
+        ChatSession f2ChatSession1= new ChatSession(F2_CHATSESSION1, FARMER_2, "Geadas no inverno", LocalDate.now());
+        chatSessionRepository.save(f2ChatSession1);
+        ChatMessage f2CS1Message1 = new ChatMessage(F2_CS1_MESSAGE1, F2_CHATSESSION1, SenderType.FARMER,
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque turpis leo, aliquet vel ipsum in, dictum tincidunt nulla.",
+                LocalDateTime.now());
+        chatMessageRepository.save(f2CS1Message1);
+
         //USER 2 - PROPERTY 1
         Property farmer2Property1 = new Property(FARMER_2_PROPERTY_1, FARMER_2, "Pedacinho do Céu", -20.59807974803205, -49.70712661743165);
+        propertyRepository.save(farmer2Property1);
         Agroclimatic f2property1Agroclimatic1 = new Agroclimatic(F2_P1_AGROCLIMATIC1, FARMER_2_PROPERTY_1, LocalDate.now(), 21, 8, 10, 67, 6);
+        agroclimaticRepository.save(f2property1Agroclimatic1);
         AISuggestion f2property1AISuggestion1 = new AISuggestion(F2_P1_AISUGGESTION1, FARMER_2_PROPERTY_1, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque turpis leo, aliquet vel ipsum in, dictum tincidunt nulla.",
                 SuggestionType.HARVEST, LocalDate.now());
+        aiSuggestionRepository.save(f2property1AISuggestion1);
         PlantationRecord f2property1PlantionRecord1 = new PlantationRecord(F2_P1_PLANTATIONRECORD1, FARMER_2_PROPERTY_1, ActivityType.PLANTIO,
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque turpis leo, aliquet vel ipsum in, dictum tincidunt nulla.",
                 LocalDateTime.now());
-        ClimateAlert f2property1ClimateAlert1 = new ClimateAlert(F2_P1_ALERT1, FARMER_2_PROPERTY_1, "Risco de geada severa", RiskLevel.ALTO,  AlertType.GRANIZO, LocalDate.now(),"ACTIVE");
-        ChatSession f2ChatSession1= new ChatSession(F2_CHATSESSION1, FARMER_2, "Geadas no inverno", LocalDate.now());
-        chatSessionRepository.save(f2ChatSession1);
-
-
-        //USER 1
-
-        //USER 1 - PROPERTY 1
-
-
-        //USER 1 - PROPERTY 2
-
-
-        //USER 2
-        farmerRepository.save(farmer2);
-        //USER 2 - PROPERTY 1
-        propertyRepository.save(farmer2Property1);
-        agroclimaticRepository.save(f2property1Agroclimatic1);
-        aiSuggestionRepository.save(f2property1AISuggestion1);
         managementNotebookRepository.save(f2property1PlantionRecord1);
+        ClimateAlert f2property1ClimateAlert1 = new ClimateAlert(F2_P1_ALERT1, FARMER_2_PROPERTY_1, "Risco de geada severa", RiskLevel.ALTO,  AlertType.GRANIZO, LocalDate.now(),"ACTIVE");
         climateAlertRepository.save(f2property1ClimateAlert1);
     }
 }

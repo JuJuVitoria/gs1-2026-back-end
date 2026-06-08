@@ -1,4 +1,4 @@
-package br.com.fiap.gs.repository.impl;
+package br.com.fiap.gs.repository;
 
 import java.util.*;
 

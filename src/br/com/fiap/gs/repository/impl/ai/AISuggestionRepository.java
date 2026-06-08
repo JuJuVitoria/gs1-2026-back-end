@@ -1,7 +1,7 @@
 package br.com.fiap.gs.repository.impl.ai;
 
 import br.com.fiap.gs.model.ai.AISuggestion;
-import br.com.fiap.gs.repository.impl.InMemoryRepository;
+import br.com.fiap.gs.repository.InMemoryRepository;
 
 import java.util.List;
 import java.util.UUID;

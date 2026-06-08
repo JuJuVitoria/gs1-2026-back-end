@@ -1,9 +1,9 @@
-package br.com.fiap.gs.repository.impl;
+package br.com.fiap.gs.repository.impl.user;
 
-import br.com.fiap.gs.model.PlantationRecord;
+import br.com.fiap.gs.model.user.PlantationRecord;
+import br.com.fiap.gs.repository.InMemoryRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public class ManagementNotebookRepository extends InMemoryRepository<PlantationRecord> {

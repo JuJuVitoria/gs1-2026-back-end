@@ -1,4 +1,4 @@
-package br.com.fiap.gs.repository.interfaces;
+package br.com.fiap.gs.repository;
 
 import java.util.List;
 import java.util.Optional;

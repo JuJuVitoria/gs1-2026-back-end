@@ -1,6 +1,7 @@
-package br.com.fiap.gs.repository.impl;
+package br.com.fiap.gs.repository.impl.user;
 
-import br.com.fiap.gs.model.Farmer;
+import br.com.fiap.gs.model.user.Farmer;
+import br.com.fiap.gs.repository.InMemoryRepository;
 
 import java.util.List;
 import java.util.Optional;

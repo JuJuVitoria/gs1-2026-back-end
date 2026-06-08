@@ -1,7 +1,7 @@
 package br.com.fiap.gs.repository.impl.climate;
 
 import br.com.fiap.gs.model.climate.Agroclimatic;
-import br.com.fiap.gs.repository.impl.InMemoryRepository;
+import br.com.fiap.gs.repository.InMemoryRepository;
 
 import java.time.LocalDate;
 import java.util.List;
