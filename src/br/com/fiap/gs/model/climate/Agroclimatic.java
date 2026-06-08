@@ -7,33 +7,33 @@ public class Agroclimatic {
     private UUID id;
     private UUID idProperty;
     private LocalDate forecastDate;
-    private int maxTempeture;
-    private int minTempeture;
+    private int maxTemperature;
+    private int minTemperature;
     private double precipitation;
     private int airHumidityPercentage;
     private double windSpeedKMH;
 
-    public Agroclimatic(UUID idProperty, LocalDate forecastDate, int maxTempeture,
-                        int minTempeture, double precipitation, int airHumidityPercentage,
+    public Agroclimatic(UUID idProperty, LocalDate forecastDate, int maxTemperature,
+                        int minTemperature, double precipitation, int airHumidityPercentage,
                         double windSpeedKMH) {
         this.id = UUID.randomUUID();
         this.idProperty = idProperty;
         this.forecastDate = forecastDate;
-        this.maxTempeture = maxTempeture;
-        this.minTempeture = minTempeture;
+        this.maxTemperature = maxTemperature;
+        this.minTemperature = minTemperature;
         this.precipitation = precipitation;
         this.airHumidityPercentage = airHumidityPercentage;
         this.windSpeedKMH = windSpeedKMH;
     }
 
-    public Agroclimatic(UUID id, UUID idProperty, LocalDate forecastDate, int maxTempeture,
-                        int minTempeture, double precipitation, int airHumidityPercentage,
+    public Agroclimatic(UUID id, UUID idProperty, LocalDate forecastDate, int maxTemperature,
+                        int minTemperature, double precipitation, int airHumidityPercentage,
                         double windSpeedKMH) {
         this.id = id;
         this.idProperty = idProperty;
         this.forecastDate = forecastDate;
-        this.maxTempeture = maxTempeture;
-        this.minTempeture = minTempeture;
+        this.maxTemperature = maxTemperature;
+        this.minTemperature = minTemperature;
         this.precipitation = precipitation;
         this.airHumidityPercentage = airHumidityPercentage;
         this.windSpeedKMH = windSpeedKMH;
@@ -63,20 +63,20 @@ public class Agroclimatic {
         this.forecastDate = forecastDate;
     }
 
-    public int getMaxTempeture() {
-        return maxTempeture;
+    public int getMaxTemperature() {
+        return maxTemperature;
     }
 
-    public void setMaxTempeture(int maxTempeture) {
-        this.maxTempeture = maxTempeture;
+    public void setMaxTemperature(int maxTemperature) {
+        this.maxTemperature = maxTemperature;
     }
 
-    public int getMinTempeture() {
-        return minTempeture;
+    public int getMinTemperature() {
+        return minTemperature;
     }
 
-    public void setMinTempeture(int minTempeture) {
-        this.minTempeture = minTempeture;
+    public void setMinTemperature(int minTemperature) {
+        this.minTemperature = minTemperature;
     }
 
     public double getPrecipitation() {
@@ -106,7 +106,7 @@ public class Agroclimatic {
     @Override
     public String toString() {
         return "Previsão do dia " + this.forecastDate + " - Temperatura máxima do dia: " +
-                this.maxTempeture + " | Temperatura minima do dia: " + this.minTempeture +
+                this.maxTemperature + " | Temperatura minima do dia: " + this.minTemperature +
                 " - Precipitação: " + this.precipitation + " | Humidade: " + this.airHumidityPercentage +
                 " | Vento km/h: " + this.windSpeedKMH + " - ID da propriedade: " + this.idProperty;
     }

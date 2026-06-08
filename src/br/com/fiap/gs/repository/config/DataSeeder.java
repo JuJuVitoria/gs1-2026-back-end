@@ -267,7 +267,7 @@ public class DataSeeder {
                         "Risco de abortamento floral e danos em R1-R3.",
                 RiskLevel.ALTO, AlertType.GEADA,
                 LocalDate.now(),
-                "ACTIVE"
+                LifeCycle.ATIVO
         ));
         climateAlertRepository.save(new ClimateAlert(
                 F1_P1_ALERT2, FARMER_1_PROPERTY_1,
@@ -275,7 +275,7 @@ public class DataSeeder {
                         "Risco de acamamento em lavoura de soja em estádio R3–R4.",
                 RiskLevel.MEDIO, AlertType.VENTO_FORTE,
                 LocalDate.now().plusDays(1),
-                "ACTIVE"
+                LifeCycle.ATIVO
         ));
 
         // --- Propriedade 2: Chácara das Flores — Campos Novos, SC — milho safrinha ---
@@ -320,7 +320,7 @@ public class DataSeeder {
                         "Pedras de 0,5–1 cm registradas em área de 3,2 km². Avalie danos na lavoura de milho em V8.",
                 RiskLevel.ALTO, AlertType.GRANIZO,
                 LocalDate.now().minusDays(1),
-                "ACTIVE"
+                LifeCycle.ATIVO
         ));
     }
 
@@ -406,7 +406,7 @@ public class DataSeeder {
                         "Risco de queda de produtividade acima de 20 % se não houver irrigação suplementar.",
                 RiskLevel.ALTO, AlertType.ESTIAGEM,
                 LocalDate.now(),
-                "ACTIVE"
+                LifeCycle.ATIVO
         ));
     }
 
