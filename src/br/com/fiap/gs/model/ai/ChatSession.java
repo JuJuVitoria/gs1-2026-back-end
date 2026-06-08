@@ -1,32 +1,41 @@
-package br.com.fiap.gs.model;
+package br.com.fiap.gs.model.ai;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class ChatSession {
-    private long id;
-    private long idFarmer;
+    private UUID id;
+    private UUID idFarmer;
     private String topic;
     private LocalDate startDate;
 
-    public ChatSession(long idFarmer, String topic, LocalDate startDate) {
+    public ChatSession(UUID idFarmer, String topic, LocalDate startDate) {
+        this.id = UUID.randomUUID();
         this.idFarmer = idFarmer;
         this.topic = topic;
         this.startDate = startDate;
     }
 
-    public long getId() {
+    public ChatSession(UUID id, UUID idFarmer, String topic, LocalDate startDate) {
+        this.id = id;
+        this.idFarmer = idFarmer;
+        this.topic = topic;
+        this.startDate = startDate;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public long getIdFarmer() {
+    public UUID getIdFarmer() {
         return idFarmer;
     }
 
-    public void setIdFarmer(long idFarmer) {
+    public void setIdFarmer(UUID idFarmer) {
         this.idFarmer = idFarmer;
     }
 
