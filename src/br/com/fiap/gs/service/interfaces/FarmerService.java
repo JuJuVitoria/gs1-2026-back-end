@@ -5,7 +5,7 @@ import br.com.fiap.gs.model.user.Farmer;
 import java.util.UUID;
 
 public interface FarmerService {
-    void registerFarmer(Farmer f, String name, String email, String password);
+    Farmer registerFarmer(String name, String email, String password);
     boolean authFarmer(String email, String password);
     Farmer searchByID(UUID id);
     Farmer searchByEmail(String email);

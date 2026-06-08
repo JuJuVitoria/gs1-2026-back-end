@@ -16,11 +16,17 @@ public class FarmerServiceImpl implements FarmerService {
     }
 
     @Override
-    public void registerFarmer(Farmer f, String name, String email, String password) {
-        f.setName(name);
-        f.setEmail(email);
-        f.setPassword(password);
-        Farmer saved = farmerRepository.save(f);
+    public Farmer registerFarmer(String name, String email, String password) {
+        if (name == null || name.isBlank())     throw new IllegalArgumentException("Nome obrigatório.");
+        if (email == null || email.isBlank())   throw new IllegalArgumentException("E-mail obrigatório.");
+        if (password == null || password.isBlank()) throw new IllegalArgumentException("Senha obrigatória.");
+
+        if (farmerRepository.findByEmail(email).isPresent()) {
+            throw new IllegalStateException("E-mail já cadastrado: " + email);
+        }
+
+        Farmer f = new Farmer(UUID.randomUUID(), name, email, password);
+        return farmerRepository.save(f);
     }
 
     @Override
@@ -49,12 +55,12 @@ public class FarmerServiceImpl implements FarmerService {
 
     @Override
     public void delete(Farmer f) {
-
+        farmerRepository.deleteById(f.getId());
     }
 
     @Override
     public void update(Farmer f) {
-
+        farmerRepository.save(f);
     }
 
     public void setLoggedUser(Farmer loggedUser) {

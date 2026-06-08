@@ -8,6 +8,7 @@ import br.com.fiap.gs.repository.impl.ai.ChatSessionRepository;
 import br.com.fiap.gs.repository.impl.climate.AgroclimaticRepository;
 import br.com.fiap.gs.repository.impl.climate.ClimateAlertRepository;
 import br.com.fiap.gs.service.impl.FarmerServiceImpl;
+import br.com.fiap.gs.service.impl.PropertyServiceImpl;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,6 +22,7 @@ public class Main {
         ChatMessageRepository chatMessageRepository = new ChatMessageRepository();
 
         FarmerServiceImpl farmerService = new FarmerServiceImpl(farmerRepository);
+        PropertyServiceImpl propertyService = new PropertyServiceImpl(propertyRepository);
 
         new DataSeeder(farmerRepository,
                 propertyRepository,
@@ -44,5 +46,8 @@ public class Main {
             );
             System.out.println("Usuário logado: " + farmerService.getLoggedFarmer().getName());
         }
+
+        System.out.println("Propriedades: " + propertyService.listPropertiesByProducer(farmerService.getLoggedFarmer().getId()));
+
     }
 }

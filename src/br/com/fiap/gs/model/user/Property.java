@@ -96,6 +96,6 @@ public class Property {
 
     @Override
     public String toString() {
-        return "Nome da propriedade: " + this.farmName + " - ID do agricultor: " + this.idFarmer + " - ID da propriedade: " + this.id;
+        return "Nome da propriedade: " + this.farmName;
     }
 }
