@@ -7,6 +7,7 @@ import br.com.fiap.gs.repository.impl.ai.AISuggestionRepository;
 import br.com.fiap.gs.repository.impl.ai.ChatSessionRepository;
 import br.com.fiap.gs.repository.impl.climate.AgroclimaticRepository;
 import br.com.fiap.gs.repository.impl.climate.ClimateAlertRepository;
+import br.com.fiap.gs.service.impl.FarmerServiceImpl;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,6 +19,9 @@ public class Main {
         ClimateAlertRepository climateAlertRepository = new ClimateAlertRepository();
         ChatSessionRepository chatSessionRepository = new ChatSessionRepository();
         ChatMessageRepository chatMessageRepository = new ChatMessageRepository();
+
+        FarmerServiceImpl farmerService = new FarmerServiceImpl(farmerRepository);
+
         new DataSeeder(farmerRepository,
                 propertyRepository,
                 agroclimaticRepository,
@@ -27,24 +31,18 @@ public class Main {
                 chatSessionRepository,
                 chatMessageRepository);
 
-        // Buscar todas as propriedades do Farmer 1
-        System.out.println("=== Propriedades da Madalena ===");
-        propertyRepository.findAllByFarmerID(DataSeeder.FARMER_1)
-                .forEach(p -> System.out.println("- " + p.getFarmName()));
-        System.out.println("\nPrevisão do tempo: " + agroclimaticRepository.findTodayForecastByProperty(DataSeeder.FARMER_1_PROPERTY_1));
-        System.out.println("Sugestão IA: " + aiSuggestionRepository.findByPropertyId(DataSeeder.FARMER_1_PROPERTY_1));
-        System.out.println("Anotações: " + managementNotebookRepository.findAllNotesByPropertyID(DataSeeder.FARMER_1_PROPERTY_1));
-        System.out.println("Alertas: " + climateAlertRepository.findActiveByPropertyId(DataSeeder.FARMER_1_PROPERTY_1));
-        System.out.println("Chat Session: " + chatSessionRepository.findAllByFarmerId(DataSeeder.FARMER_1));
-        System.out.println("Chat Message: " + chatMessageRepository.findAllBySessionId(DataSeeder.F1_CHATSESSION1));
+        farmerService.getListFarmer().forEach(f ->
+                System.out.println("Farmer carregado: " + f.getName() + " | " + f.getEmail())
+        );
 
-        // Buscar todas as propriedades do Farmer 2
-        System.out.println("\n \n=== Propriedades do João ===");
-        propertyRepository.findAllByFarmerID(DataSeeder.FARMER_2)
-                .forEach(p -> System.out.println("- " + p.getFarmName()));
-        System.out.println("\nPrevisão do tempo: " + agroclimaticRepository.findTodayForecastByProperty(DataSeeder.FARMER_2_PROPERTY_1));
-        System.out.println("Sugestão IA: " + aiSuggestionRepository.findByPropertyId(DataSeeder.FARMER_2_PROPERTY_1));
-        System.out.println("Alertas: " + climateAlertRepository.findActiveByPropertyId(DataSeeder.FARMER_1_PROPERTY_1));
-        System.out.println("Chat Session: " + chatSessionRepository.findAllByFarmerId(DataSeeder.FARMER_2));
+        boolean auth = farmerService.authFarmer("madalena@astrocrop.com.br", "senha123");
+        System.out.println("Login Madalena: " + auth);
+
+        if (auth) {
+            farmerService.setLoggedUser(
+                    farmerService.searchByEmail("madalena@astrocrop.com.br")
+            );
+            System.out.println("Usuário logado: " + farmerService.getLoggedFarmer().getName());
+        }
     }
 }
