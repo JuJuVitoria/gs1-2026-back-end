@@ -11,9 +11,12 @@ import java.util.Scanner;
 public class MainMenu {
 
     private final Scanner scanner;
+    //
     private final FarmerServiceImpl farmerService;
     private final PropertyServiceImpl propertyService;
     private final AuthServiceImpl authService;
+
+    private final AgroclimaticMenu agroClimateMenu;
 
     public MainMenu(FarmerServiceImpl farmerService,
                     PropertyServiceImpl propertyService,
@@ -21,11 +24,14 @@ public class MainMenu {
                     AgroIntelligenceServiceImpl agroService,
                     ClimateServiceImpl climateService,
                     ChatService chatService,
-                    AuthServiceImpl authService) {
+                    AuthServiceImpl authService,
+                    AgroclimaticMenu agroClimateMenu) {
         this.scanner         = new Scanner(System.in);
         this.farmerService   = farmerService;
         this.propertyService = propertyService;
         this.authService     = authService;
+
+        this.agroClimateMenu = agroClimateMenu;
     }
 
     public void showMenu() {
@@ -45,7 +51,7 @@ public class MainMenu {
 
             switch (option) {
                 case 1 -> System.out.println("\nEm desenvolvimento!\n");
-                case 2 -> System.out.println("\nEm desenvolvimento!\n");
+                case 2 -> agroClimateMenu.show();
                 case 3 -> System.out.println("\nEm desenvolvimento!\n");
                 case 4 -> switchActiveProperty();
                 case 0 -> System.out.println("\nSaindo...\n");
@@ -66,7 +72,9 @@ public class MainMenu {
                 Você ainda não possui nenhuma propriedade cadastrada.
                 
                 """);
-            //fazer operação de cadastro de propriedade
+            Property newProperty = registerProperty();
+            propertyService.setActiveProperty(newProperty);
+            System.out.println("Propriedade " + newProperty.getFarmName() + " cadastrada...");
             return;
         }
 
@@ -80,7 +88,6 @@ public class MainMenu {
             return;
         }
 
-        // Múltiplas propriedades → usuário escolhe
         printPropertySelectionTable(properties);
 
         Property chosen = readPropertyChoice(properties);
@@ -122,12 +129,12 @@ public class MainMenu {
             Property p = properties.get(i);
             boolean isActive = current != null && p.getId().equals(current.getId());
             String marker = isActive ? "+" : " ";
-            System.out.printf("║        [%d] %s %-70s║%n", i + 1, marker, p.getFarmName());
+            System.out.printf("║        [%d] %s %-71s║%n", i + 1, marker, p.getFarmName());
         }
         System.out.println("║        [0] Para cadastrar uma nova propriedade                                      ║");
         System.out.println("║                                                                                     ║");
         System.out.println("╠═════════════════════════════════════════════════════════════════════════════════════╣");
-        System.out.println("║       [-1] Cancelar                                                                  ║");
+        System.out.println("║       [-1] Cancelar                                                                 ║");
         System.out.println("╚═════════════════════════════════════════════════════════════════════════════════════╝");
         System.out.println("  + = propriedade atualmente ativa");
 
@@ -137,14 +144,13 @@ public class MainMenu {
             if (idx == -1) {
                 System.out.println("\n  -Operação cancelada.\n");
                 return;
-            }
-            if (idx == 0) {
-                //fazer operação de cadastro de propriedade
-                System.out.println("\n  Em desenvolvimento\n");
-                return;
-            }
-            if (idx >= 1 && idx <= properties.size()) {
+            } else if (idx == 0) {
+                Property newProperty = registerProperty();
+                propertyService.setActiveProperty(newProperty);
+                System.out.printf("%nPropriedade trocada para: %s%n%n", newProperty.getFarmName());
+            } else if (idx >= 1 && idx <= properties.size()) {
                 Property chosen = properties.get(idx - 1);
+
                 if (current != null && chosen.getId().equals(current.getId())) {
                     System.out.printf("%n\"%s\" já é a propriedade ativa.%n%n", chosen.getFarmName());
                 } else {
@@ -210,20 +216,72 @@ public class MainMenu {
     private Property readPropertyChoice(List<Property> properties) {
         while (true) {
             System.out.print("Escolha: ");
+
             try {
-                int idx = Integer.parseInt(scanner.nextLine().trim()) - 1;
-                if (idx == 0) {
-                    //fazer operação de cadastro de propriedade
-                    System.out.println("    Em Desenvolvimento");
-                    return null;
+                int option = Integer.parseInt(scanner.nextLine().trim());
+
+                if (option == 0) {
+                    return registerProperty();
                 }
+
+                int idx = option - 1;
+
                 if (idx >= 0 && idx < properties.size()) {
                     return properties.get(idx);
                 }
+
                 System.out.println("Número fora do intervalo. Tente novamente.");
+
             } catch (NumberFormatException e) {
                 System.out.println("Entrada inválida. Digite o número da propriedade.");
             }
         }
+    }
+
+    private Property registerProperty() {
+        System.out.println("""
+    
+    ┌─────────────────────────────────────────────────────────────────────────────────────┐
+    │                             CADASTRE SUA PROPRIEDADE                                │
+    └─────────────────────────────────────────────────────────────────────────────────────┘
+    """);
+
+        System.out.print("Digite o nome da sua propriedade: ");
+        String farmName = scanner.nextLine().trim();
+
+        double latitude;
+        while (true) {
+            try {
+                System.out.print("Latitude: ");
+                latitude = Double.parseDouble(scanner.nextLine().trim());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Latitude inválida. Tente novamente.");
+            }
+        }
+
+        double longitude;
+        while (true) {
+            try {
+                System.out.print("Longitude: ");
+                longitude = Double.parseDouble(scanner.nextLine().trim());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Longitude inválida. Tente novamente.");
+            }
+        }
+
+        Farmer farmer = authService.getLoggedUser();
+
+        if (farmer == null) {
+            throw new IllegalStateException("Nenhum usuário logado.");
+        }
+
+        return propertyService.registerProperty(
+                farmer.getId(),
+                farmName,
+                latitude,
+                longitude
+        );
     }
 }
