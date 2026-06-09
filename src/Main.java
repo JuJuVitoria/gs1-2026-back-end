@@ -1,7 +1,7 @@
-import br.com.fiap.gs.enums.ActivityType;
+import br.com.fiap.gs.model.ai.AISuggestion;
 import br.com.fiap.gs.model.climate.Agroclimatic;
 import br.com.fiap.gs.model.climate.ClimateAlert;
-import br.com.fiap.gs.model.user.PlantationRecord;
+
 import br.com.fiap.gs.repository.config.DataSeeder;
 import br.com.fiap.gs.repository.impl.ai.ChatMessageRepository;
 import br.com.fiap.gs.repository.impl.user.FarmerRepository;
@@ -11,19 +11,20 @@ import br.com.fiap.gs.repository.impl.ai.AISuggestionRepository;
 import br.com.fiap.gs.repository.impl.ai.ChatSessionRepository;
 import br.com.fiap.gs.repository.impl.climate.AgroclimaticRepository;
 import br.com.fiap.gs.repository.impl.climate.ClimateAlertRepository;
+
 import br.com.fiap.gs.service.impl.ClimateServiceImpl;
 import br.com.fiap.gs.service.impl.FarmerServiceImpl;
 import br.com.fiap.gs.service.impl.ManagementNotebookServiceImpl;
 import br.com.fiap.gs.service.impl.PropertyServiceImpl;
+import br.com.fiap.gs.service.impl.AgroIntelligenceServiceImpl;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 import static br.com.fiap.gs.repository.config.DataSeeder.FARMER_1_PROPERTY_1;
 
 public class Main {
     public static void main(String[] args) {
+
         FarmerRepository farmerRepository = new FarmerRepository();
         PropertyRepository propertyRepository = new PropertyRepository();
         AgroclimaticRepository agroclimaticRepository = new AgroclimaticRepository();
@@ -37,15 +38,11 @@ public class Main {
         PropertyServiceImpl propertyService = new PropertyServiceImpl(propertyRepository);
         ClimateServiceImpl climateService = new ClimateServiceImpl(agroclimaticRepository, climateAlertRepository);
         ManagementNotebookServiceImpl managementService = new ManagementNotebookServiceImpl(managementNotebookRepository);
+        AgroIntelligenceServiceImpl agroService = new AgroIntelligenceServiceImpl(aiSuggestionRepository);
 
-        new DataSeeder(farmerRepository,
-                propertyRepository,
-                agroclimaticRepository,
-                aiSuggestionRepository,
-                managementNotebookRepository,
-                climateAlertRepository,
-                chatSessionRepository,
-                chatMessageRepository);
+        new DataSeeder(farmerRepository, propertyRepository, agroclimaticRepository,
+                aiSuggestionRepository, managementNotebookRepository, climateAlertRepository,
+                chatSessionRepository, chatMessageRepository);
 
         farmerService.getListFarmer().forEach(f ->
                 System.out.println("Farmer carregado: " + f.getName() + " | " + f.getEmail())
@@ -61,18 +58,12 @@ public class Main {
             System.out.println("Usuário logado: " + farmerService.getLoggedFarmer().getName());
         }
 
-        System.out.println("Propriedades: " + propertyService.listPropertiesByProducer(farmerService.getLoggedFarmer().getId()));
+        System.out.println("Propriedades: " + propertyService.listPropertiesByProducer(
+                farmerService.getLoggedFarmer().getId()));
 
         Agroclimatic forecast = new Agroclimatic(
-                FARMER_1_PROPERTY_1,
-                LocalDate.now(),
-                25,
-                2,
-                15.0,
-                45,
-                30.0
+                FARMER_1_PROPERTY_1, LocalDate.now(), 25, 2, 15.0, 45, 30.0
         );
-
         climateService.registerAgroclimatic(forecast);
         System.out.println("\nPrevisão registrada");
 
@@ -80,7 +71,7 @@ public class Main {
         if (alert != null) {
             climateAlertRepository.save(alert);
             System.out.println("\nAlerta gerado: " + alert.getAlertType()
-                    + " | Risco: "         + alert.getSeverity());
+                    + " | Risco: " + alert.getSeverity());
         }
 
         climateService.getActiveAlerts(FARMER_1_PROPERTY_1)
@@ -89,15 +80,34 @@ public class Main {
                         () -> System.out.println("Nenhum alerta ativo")
                 );
 
+
+        AISuggestion rec = agroService.recomendationsAI(
+                FARMER_1_PROPERTY_1, "florescimento", "frio"
+        );
+        System.out.println("\nRecomendação IA: " + rec.getSuggestionText());
+
+        String risco = agroService.evaluateHarvestRisk(FARMER_1_PROPERTY_1);
+        System.out.println("Risco de colheita: " + risco);
+
+        String janela = agroService.generatePlantingWindow(FARMER_1_PROPERTY_1);
+        System.out.println("Janela de plantio: " + janela);
+
+        System.out.println("\nHistórico de sugestões IA:");
+        agroService.listAISuggestionHistory(FARMER_1_PROPERTY_1)
+                .forEach(s -> System.out.println("   → [" + s.getSuggestionType()
+                        + " | " + s.getDataGenerated() + "] " + s.getSuggestionText()));
+
+        System.out.println("\nResumo IA: " +
+                agroService.getRecommendationSummary(FARMER_1_PROPERTY_1));
+
         System.out.println("\nHistórico de previsões:");
         climateService.consultHistory(DataSeeder.FARMER_3_PROPERTY_1)
                 .forEach(f -> System.out.println("   → " + f.getForecastDate()
                         + " | Chuva: " + f.getPrecipitation() + "mm"));
 
-
         System.out.println("\nAnotações: ");
         managementService.listNotebookByProperty(DataSeeder.FARMER_3_PROPERTY_1)
                 .forEach(n -> System.out.println("   → " + n.getContent()
-                + " | Data da anotação: " + n.getRegistrationDate()));
+                        + " | Data da anotação: " + n.getRegistrationDate()));
     }
 }
