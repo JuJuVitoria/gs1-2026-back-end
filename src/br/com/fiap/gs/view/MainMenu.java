@@ -11,13 +11,12 @@ import java.util.Scanner;
 public class MainMenu {
 
     private final Scanner scanner;
-    //
     private final FarmerServiceImpl farmerService;
     private final PropertyServiceImpl propertyService;
     private final AuthServiceImpl authService;
     private final ManagementMenu managementMenu;
-
     private final AgroclimaticMenu agroClimateMenu;
+    private final ChatMenu chatMenu;
 
     public MainMenu(FarmerServiceImpl farmerService,
                     PropertyServiceImpl propertyService,
@@ -32,9 +31,9 @@ public class MainMenu {
         this.farmerService   = farmerService;
         this.propertyService = propertyService;
         this.authService     = authService;
-
-        this.managementMenu = managementMenu;
+        this.managementMenu  = managementMenu;
         this.agroClimateMenu = agroClimateMenu;
+        this.chatMenu        = new ChatMenu(chatService, authService, scanner);
     }
 
     public void showMenu() {
@@ -55,13 +54,17 @@ public class MainMenu {
             switch (option) {
                 case 1 -> managementMenu.show();
                 case 2 -> agroClimateMenu.show();
-                case 3 -> System.out.println("\nEm desenvolvimento!\n");
+                case 3 -> chatMenu.show();
                 case 4 -> switchActiveProperty();
                 case 0 -> System.out.println("\nSaindo...\n");
                 default -> System.out.println("Opção inválida.");
             }
         } while (option != 0);
     }
+
+    // -------------------------------------------------------------------------
+    // Seleção de propriedade ativa
+    // -------------------------------------------------------------------------
 
     private void resolveActiveProperty() {
         Farmer farmer = authService.getLoggedUser();
@@ -146,14 +149,12 @@ public class MainMenu {
             int idx = Integer.parseInt(scanner.nextLine().trim());
             if (idx == -1) {
                 System.out.println("\n  -Operação cancelada.\n");
-                return;
             } else if (idx == 0) {
                 Property newProperty = registerProperty();
                 propertyService.setActiveProperty(newProperty);
                 System.out.printf("%nPropriedade trocada para: %s%n%n", newProperty.getFarmName());
             } else if (idx >= 1 && idx <= properties.size()) {
                 Property chosen = properties.get(idx - 1);
-
                 if (current != null && chosen.getId().equals(current.getId())) {
                     System.out.printf("%n\"%s\" já é a propriedade ativa.%n%n", chosen.getFarmName());
                 } else {
@@ -168,14 +169,17 @@ public class MainMenu {
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Cabeçalho
+    // -------------------------------------------------------------------------
+
     private void printHeader() {
         Property active = propertyService.getActiveProperty();
         String propLabel = (active != null)
                 ? active.getFarmName()
                 : "Nenhuma propriedade selecionada";
 
-        // Limita o label a 54 chars para caber na caixa
-        if (propLabel.length() > 54) propLabel = propLabel.substring(0, 51) + "...";
+        if (propLabel.length() > 79) propLabel = propLabel.substring(0, 76) + "...";
 
         System.out.println("\n╔═════════════════════════════════════════════════════════════════════════════════════╗");
         System.out.printf( "║      %-79s║%n", propLabel);
@@ -183,25 +187,16 @@ public class MainMenu {
         System.out.println("║                                                                                     ║");
         System.out.println("║       1. Caderno de Gestão                                                          ║");
         System.out.println("║       2. Agro / Clima                                                               ║");
-        System.out.println("║       3. AI                                                                         ║");
+        System.out.println("║       3. Chat IA                                                                    ║");
         System.out.println("║       4. Trocar propriedade ativa                                                   ║");
         System.out.println("║       0. Sair                                                                       ║");
         System.out.println("║                                                                                     ║");
         System.out.println("╚═════════════════════════════════════════════════════════════════════════════════════╝");
     }
 
-    private boolean requireActiveProperty() {
-        if (propertyService.getActiveProperty() != null) return true;
-
-        System.out.println("\n! Nenhuma propriedade selecionada.");
-        System.out.print("Deseja selecionar uma agora? (s/n): ");
-        String resp = scanner.nextLine().trim().toLowerCase();
-        if (resp.equals("s")) {
-            resolveActiveProperty();
-            return propertyService.getActiveProperty() != null;
-        }
-        return false;
-    }
+    // -------------------------------------------------------------------------
+    // Helpers de propriedade
+    // -------------------------------------------------------------------------
 
     private void printPropertySelectionTable(List<Property> properties) {
         System.out.println("\n╔═════════════════════════════════════════════════════════════════════════════════════╗");
@@ -219,22 +214,12 @@ public class MainMenu {
     private Property readPropertyChoice(List<Property> properties) {
         while (true) {
             System.out.print("Escolha: ");
-
             try {
                 int option = Integer.parseInt(scanner.nextLine().trim());
-
-                if (option == 0) {
-                    return registerProperty();
-                }
-
+                if (option == 0) return registerProperty();
                 int idx = option - 1;
-
-                if (idx >= 0 && idx < properties.size()) {
-                    return properties.get(idx);
-                }
-
+                if (idx >= 0 && idx < properties.size()) return properties.get(idx);
                 System.out.println("Número fora do intervalo. Tente novamente.");
-
             } catch (NumberFormatException e) {
                 System.out.println("Entrada inválida. Digite o número da propriedade.");
             }
@@ -275,16 +260,8 @@ public class MainMenu {
         }
 
         Farmer farmer = authService.getLoggedUser();
+        if (farmer == null) throw new IllegalStateException("Nenhum usuário logado.");
 
-        if (farmer == null) {
-            throw new IllegalStateException("Nenhum usuário logado.");
-        }
-
-        return propertyService.registerProperty(
-                farmer.getId(),
-                farmName,
-                latitude,
-                longitude
-        );
+        return propertyService.registerProperty(farmer.getId(), farmName, latitude, longitude);
     }
 }
