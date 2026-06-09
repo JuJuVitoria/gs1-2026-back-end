@@ -1,5 +1,6 @@
 package br.com.fiap.gs.repository.impl.user;
 
+import br.com.fiap.gs.enums.ActivityType;
 import br.com.fiap.gs.model.user.PlantationRecord;
 import br.com.fiap.gs.repository.InMemoryRepository;
 
@@ -15,6 +16,12 @@ public class ManagementNotebookRepository extends InMemoryRepository<PlantationR
     public List<PlantationRecord> findAllNotesByPropertyID(UUID propertyID) {
         return store.values().stream()
                 .filter(p -> p.getIdProperty().equals(propertyID))
+                .toList();
+    }
+
+    public List<PlantationRecord> findAllNotesByTypeAndProperty(ActivityType type, UUID idProperty) {
+        return store.values().stream()
+                .filter(p -> p.getActivityType().equals(type) && p.getIdProperty().equals(idProperty))
                 .toList();
     }
 }

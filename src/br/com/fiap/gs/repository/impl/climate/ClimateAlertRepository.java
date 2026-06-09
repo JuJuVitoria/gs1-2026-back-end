@@ -1,10 +1,12 @@
 package br.com.fiap.gs.repository.impl.climate;
 
 import br.com.fiap.gs.enums.AlertType;
+import br.com.fiap.gs.enums.LifeCycle;
 import br.com.fiap.gs.model.climate.ClimateAlert;
 import br.com.fiap.gs.repository.InMemoryRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class ClimateAlertRepository extends InMemoryRepository<ClimateAlert> {
@@ -26,10 +28,10 @@ public class ClimateAlertRepository extends InMemoryRepository<ClimateAlert> {
                 .toList();
     }
 
-    public List<ClimateAlert> findActiveByPropertyId(UUID propertyId) {
+    public Optional<ClimateAlert> findActiveByPropertyId(UUID propertyId) {
         return store.values().stream()
                 .filter(a -> a.getIdProperty().equals(propertyId)
-                        && a.getStatus().equalsIgnoreCase("ACTIVE"))
-                .toList();
+                        && a.getStatus().equals(LifeCycle.ATIVO))
+                .findFirst();
     }
 }

@@ -1,6 +1,7 @@
 package br.com.fiap.gs.model.climate;
 
 import br.com.fiap.gs.enums.AlertType;
+import br.com.fiap.gs.enums.LifeCycle;
 import br.com.fiap.gs.enums.RiskLevel;
 
 import java.time.LocalDate;
@@ -13,11 +14,11 @@ public class ClimateAlert {
     private RiskLevel severity;
     private AlertType alertType;
     private LocalDate generatedDate;
-    private String status;
+    private LifeCycle status;
 
     public ClimateAlert(UUID idProperty, String description,
                         RiskLevel severity, AlertType alertType,
-                        LocalDate generatedDate, String status) {
+                        LocalDate generatedDate, LifeCycle status) {
         this.id = UUID.randomUUID();
         this.idProperty = idProperty;
         this.description = description;
@@ -30,7 +31,7 @@ public class ClimateAlert {
     public ClimateAlert(UUID id, UUID idProperty,
                         String description, RiskLevel severity,
                         AlertType alertType, LocalDate generatedDate,
-                        String status) {
+                        LifeCycle status) {
         this.id = id;
         this.idProperty = idProperty;
         this.description = description;
@@ -88,9 +89,9 @@ public class ClimateAlert {
         this.generatedDate = generatedDate;
     }
 
-    public String getStatus() { return status; }
+    public LifeCycle getStatus() { return status; }
 
-    public void setStatus(String status) { this.status = status; }
+    public void setStatus(LifeCycle status) { this.status = status; }
 
     @Override
     public String toString() {
