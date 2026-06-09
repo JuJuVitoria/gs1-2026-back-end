@@ -6,6 +6,7 @@ import br.com.fiap.gs.repository.impl.user.ManagementNotebookRepository;
 import br.com.fiap.gs.service.interfaces.ManagementNotebookService;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,7 +21,8 @@ public class ManagementNotebookServiceImpl implements ManagementNotebookService 
 
     @Override
     public void registerManagementActivity(UUID idProperty, ActivityType activityType, String content, LocalDateTime registrationDate) {
-
+        PlantationRecord record = new PlantationRecord(idProperty, activityType, content, registrationDate);
+        managementRepo.save(record);
     }
 
     @Override
@@ -45,11 +47,15 @@ public class ManagementNotebookServiceImpl implements ManagementNotebookService 
 
     @Override
     public PlantationRecord getLatestActivity(UUID idProp) {
-        return null;
+        return managementRepo.findAllNotesByPropertyID(idProp).stream()
+                .max(Comparator.comparing(PlantationRecord::getRegistrationDate))
+                .orElse(null);
     }
 
     @Override
     public String getCurrentPhase(UUID idProp) {
-        return "";
+        PlantationRecord latest = getLatestActivity(idProp);
+        if (latest == null) return "Sem atividades registradas";
+        return latest.getActivityType().toString();
     }
 }

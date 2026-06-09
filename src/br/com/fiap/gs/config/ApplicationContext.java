@@ -10,6 +10,7 @@ import br.com.fiap.gs.service.interfaces.ChatService;
 import br.com.fiap.gs.view.AgroclimaticMenu;
 import br.com.fiap.gs.view.LoginMenu;
 import br.com.fiap.gs.view.MainMenu;
+import br.com.fiap.gs.view.ManagementMenu;
 
 public class ApplicationContext {
 
@@ -64,6 +65,12 @@ public class ApplicationContext {
                     propertyService
             );
 
+    private final ManagementMenu managementMenu =
+            new ManagementMenu(
+                    managementService,
+                    propertyService
+            );
+
     private final MainMenu mainMenu =
             new MainMenu(
                     farmerService,
@@ -73,6 +80,7 @@ public class ApplicationContext {
                     climateService,
                     chatService,
                     authService,
+                    managementMenu,
                     agroClimateMenu
             );
 

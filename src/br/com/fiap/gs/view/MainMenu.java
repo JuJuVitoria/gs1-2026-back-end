@@ -15,6 +15,7 @@ public class MainMenu {
     private final FarmerServiceImpl farmerService;
     private final PropertyServiceImpl propertyService;
     private final AuthServiceImpl authService;
+    private final ManagementMenu managementMenu;
 
     private final AgroclimaticMenu agroClimateMenu;
 
@@ -25,12 +26,14 @@ public class MainMenu {
                     ClimateServiceImpl climateService,
                     ChatService chatService,
                     AuthServiceImpl authService,
+                    ManagementMenu managementMenu,
                     AgroclimaticMenu agroClimateMenu) {
         this.scanner         = new Scanner(System.in);
         this.farmerService   = farmerService;
         this.propertyService = propertyService;
         this.authService     = authService;
 
+        this.managementMenu = managementMenu;
         this.agroClimateMenu = agroClimateMenu;
     }
 
@@ -50,7 +53,7 @@ public class MainMenu {
             }
 
             switch (option) {
-                case 1 -> System.out.println("\nEm desenvolvimento!\n");
+                case 1 -> managementMenu.show();
                 case 2 -> agroClimateMenu.show();
                 case 3 -> System.out.println("\nEm desenvolvimento!\n");
                 case 4 -> switchActiveProperty();
