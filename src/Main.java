@@ -1,4 +1,6 @@
+import br.com.fiap.gs.enums.SenderType;
 import br.com.fiap.gs.model.ai.AISuggestion;
+import br.com.fiap.gs.model.ai.ChatSession;
 import br.com.fiap.gs.model.climate.Agroclimatic;
 import br.com.fiap.gs.model.climate.ClimateAlert;
 
@@ -12,11 +14,8 @@ import br.com.fiap.gs.repository.impl.ai.ChatSessionRepository;
 import br.com.fiap.gs.repository.impl.climate.AgroclimaticRepository;
 import br.com.fiap.gs.repository.impl.climate.ClimateAlertRepository;
 
-import br.com.fiap.gs.service.impl.ClimateServiceImpl;
-import br.com.fiap.gs.service.impl.FarmerServiceImpl;
-import br.com.fiap.gs.service.impl.ManagementNotebookServiceImpl;
-import br.com.fiap.gs.service.impl.PropertyServiceImpl;
-import br.com.fiap.gs.service.impl.AgroIntelligenceServiceImpl;
+import br.com.fiap.gs.service.impl.*;
+import br.com.fiap.gs.service.interfaces.ChatService;
 
 import java.time.LocalDate;
 
@@ -39,6 +38,7 @@ public class Main {
         ClimateServiceImpl climateService = new ClimateServiceImpl(agroclimaticRepository, climateAlertRepository);
         ManagementNotebookServiceImpl managementService = new ManagementNotebookServiceImpl(managementNotebookRepository);
         AgroIntelligenceServiceImpl agroService = new AgroIntelligenceServiceImpl(aiSuggestionRepository);
+        ChatService chatService = new ChatServiceImpl(chatSessionRepository, chatMessageRepository);
 
         new DataSeeder(farmerRepository, propertyRepository, agroclimaticRepository,
                 aiSuggestionRepository, managementNotebookRepository, climateAlertRepository,
@@ -109,5 +109,14 @@ public class Main {
         managementService.listNotebookByProperty(DataSeeder.FARMER_3_PROPERTY_1)
                 .forEach(n -> System.out.println("   → " + n.getContent()
                         + " | Data da anotação: " + n.getRegistrationDate()));
+
+        chatService.listSessionsByFarmer(DataSeeder.FARMER_1)
+                .forEach(s -> System.out.println(chatService.getConversationSummary(s.getId())));
+
+        chatService.printConversation(DataSeeder.F1_CHATSESSION1);
+
+        ChatSession sessao = chatService.createSession(DataSeeder.FARMER_1, "Dúvida sobre irrigação");
+        chatService.sendMessage(sessao.getId(), SenderType.FARMER, "Quanto irrigar hoje?");
+        chatService.sendMessage(sessao.getId(), SenderType.BOT, "Recomendo 20mm nas próximas 6h.");
     }
 }
